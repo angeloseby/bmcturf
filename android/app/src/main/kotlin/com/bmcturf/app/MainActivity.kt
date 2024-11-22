@@ -1,4 +1,4 @@
-package com.example.bmcturf
+package com.bmcturf.app
 
 import io.flutter.embedding.android.FlutterActivity
 

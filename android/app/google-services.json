@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "342282499292",
+    "project_id": "bmcturf-0123",
+    "storage_bucket": "bmcturf-0123.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:342282499292:android:f24ada9501f4ebd25b3019",
+        "android_client_info": {
+          "package_name": "com.bmcturf.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCYQB1cDKK4DR9I8uxxBDB6B_wYGT21F_w"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
