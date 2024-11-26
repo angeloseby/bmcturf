@@ -1,7 +1,11 @@
+import 'package:bmcturf/pages/login/loginpage.dart';
+import 'package:bmcturf/pages/otp/otppage.dart';
+import 'package:bmcturf/services/auth_provider.dart';
 import 'package:bmcturf/utils/color_scheme.dart';
 import 'package:bmcturf/utils/validators.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
@@ -24,6 +28,8 @@ class _RegisterPageState extends State<RegisterPage> {
 
   @override
   Widget build(BuildContext context) {
+    final authProvider = Provider.of<AuthProvider>(context);
+
     return Scaffold(
       backgroundColor: CustomColorScheme.kSplashScreenScaffoldColor,
       body: Padding(
@@ -177,30 +183,66 @@ class _RegisterPageState extends State<RegisterPage> {
                         ),
                         TextButton(
                           onPressed: () {
-                            _submitForm();
+                            if (_submitForm()) {
+                              authProvider.onOtpSent = (phone) {
+                                // Handle when OTP is sent
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (builder) {
+                                      return const OTPPage();
+                                    },
+                                  ),
+                                );
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(content: Text('OTP sent to $phone')),
+                                );
+                              };
+
+                              authProvider.onAuthError = (errorMessage) {
+                                // Handle authentication errors
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                      content: Text('Error: $errorMessage')),
+                                );
+                              };
+
+                              authProvider
+                                  .sendOtp(_phoneController.text.trim());
+                            }
                           },
                           style: TextButton.styleFrom(
                             backgroundColor: Colors.white,
                             minimumSize:
                                 Size(MediaQuery.of(context).size.width, 50),
                           ),
-                          child: Text(
-                            "Register",
-                            style: GoogleFonts.poppins(
-                              fontWeight: FontWeight.w600,
-                              fontSize: 16,
-                            ),
-                          ),
+                          child: authProvider.isLoading
+                              ? const CircularProgressIndicator()
+                              : Text(
+                                  "Register",
+                                  style: GoogleFonts.poppins(
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 16,
+                                  ),
+                                ),
                         ),
                         const SizedBox(
                           height: 50,
                         ),
-                        Text(
-                          "Already have an account ? Login.",
-                          style: GoogleFonts.poppins(
-                            color: Colors.white,
-                            fontWeight: FontWeight.normal,
-                            fontSize: 16,
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.of(context).pushReplacement(
+                              MaterialPageRoute(
+                                builder: (context) => const LoginPage(),
+                              ),
+                            );
+                          },
+                          child: Text(
+                            "Already have an account ? Login.",
+                            style: GoogleFonts.poppins(
+                              color: Colors.white,
+                              fontWeight: FontWeight.normal,
+                              fontSize: 16,
+                            ),
                           ),
                         ),
                       ],
@@ -216,14 +258,10 @@ class _RegisterPageState extends State<RegisterPage> {
   }
 
   // Function to handle form submission
-  void _submitForm() {
+  bool _submitForm() {
     if (_formKey.currentState!.validate()) {
       // If the form is valid, show a success message
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Form Submitted Successfully!'),
-        ),
-      );
+      return true;
     } else {
       // If the form is not valid, show an error message
       ScaffoldMessenger.of(context).showSnackBar(
@@ -231,6 +269,7 @@ class _RegisterPageState extends State<RegisterPage> {
           content: Text('Please correct the errors in the form'),
         ),
       );
+      return false;
     }
   }
 }

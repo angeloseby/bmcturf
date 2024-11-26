@@ -1,3 +1,4 @@
+import 'package:bmcturf/pages/register/registerpage.dart';
 import 'package:bmcturf/utils/color_scheme.dart';
 import 'package:bmcturf/utils/validators.dart';
 import 'package:flutter/material.dart';
@@ -158,12 +159,21 @@ class _LoginPageState extends State<LoginPage> {
                         const SizedBox(
                           height: 50,
                         ),
-                        Text(
-                          "Don't have an account ! Register Now.",
-                          style: GoogleFonts.poppins(
-                            color: Colors.white,
-                            fontWeight: FontWeight.normal,
-                            fontSize: 16,
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.of(context).pushReplacement(
+                              MaterialPageRoute(
+                                builder: (builder) => const RegisterPage(),
+                              ),
+                            );
+                          },
+                          child: Text(
+                            "Don't have an account ! Register Now.",
+                            style: GoogleFonts.poppins(
+                              color: Colors.white,
+                              fontWeight: FontWeight.normal,
+                              fontSize: 16,
+                            ),
                           ),
                         ),
                       ],

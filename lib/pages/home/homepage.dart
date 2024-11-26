@@ -1,12 +1,15 @@
+import 'package:bmcturf/services/auth_provider.dart';
 import 'package:bmcturf/utils/color_scheme.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final authProvider = Provider.of<AuthProvider>(context);
     return Scaffold(
       backgroundColor: CustomColorScheme.kSplashScreenScaffoldColor,
       body: Stack(
@@ -42,6 +45,11 @@ class HomePage extends StatelessWidget {
                   fontSize: 28,
                 ),
               ),
+              TextButton(
+                  onPressed: () {
+                    authProvider.signOut();
+                  },
+                  child: const Text("Sign Out"))
             ],
           ),
         ],

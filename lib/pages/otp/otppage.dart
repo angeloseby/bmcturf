@@ -1,7 +1,9 @@
+import 'package:bmcturf/services/auth_provider.dart';
 import 'package:bmcturf/utils/color_scheme.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
+import 'package:provider/provider.dart';
 
 class OTPPage extends StatefulWidget {
   const OTPPage({super.key});
@@ -16,6 +18,8 @@ class _OTPPageState extends State<OTPPage> {
 
   @override
   Widget build(BuildContext context) {
+    final authProvider = Provider.of<AuthProvider>(context);
+
     return Scaffold(
       backgroundColor: CustomColorScheme.kSplashScreenScaffoldColor,
       body: Padding(
@@ -136,24 +140,32 @@ class _OTPPageState extends State<OTPPage> {
                   // },
                   onCompleted: (value) {
                     print('Completed OTP: $value');
+                    authProvider.verifyOtp(_otpController.text, context);
                   },
                 ),
                 const SizedBox(
                   height: 50,
                 ),
                 TextButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    authProvider.verifyOtp(_otpController.text, context);
+                  },
                   style: TextButton.styleFrom(
                     backgroundColor: Colors.white,
-                    minimumSize: Size(MediaQuery.of(context).size.width, 50),
-                  ),
-                  child: Text(
-                    "Login",
-                    style: GoogleFonts.poppins(
-                      fontWeight: FontWeight.w600,
-                      fontSize: 16,
+                    minimumSize: Size(
+                      MediaQuery.of(context).size.width,
+                      50,
                     ),
                   ),
+                  child: authProvider.isLoading
+                      ? const CircularProgressIndicator()
+                      : Text(
+                          "Verify",
+                          style: GoogleFonts.poppins(
+                            fontWeight: FontWeight.w600,
+                            fontSize: 16,
+                          ),
+                        ),
                 ),
               ],
             ),
